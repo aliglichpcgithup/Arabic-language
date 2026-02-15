@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arabic Mega Ultra | Вселенная языка</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --surface: #111827;
+            --primary: #10b981;
+            --accent: #f59e0b;
+            --text: #f9fafb;
+            --text-dim: #9ca3af;
+            --card-grad: linear-gradient(135deg, #1f2937, #111827);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; scrollbar-width: none; }
+        ::-webkit-scrollbar { display: none; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- БОКОВОЕ МЕНЮ (Скроллируемое) --- */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #374151;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo { font-weight: 900; font-size: 1.5rem; color: var(--primary); margin-bottom: 30px; letter-spacing: -1px; text-align: center; }
+
+        .nav-section { margin-bottom: 25px; }
+        .nav-label { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); font-weight: 800; margin: 10px 0; letter-spacing: 1px; }
+
+        .btn {
+            width: 100%; padding: 12px 15px; border-radius: 12px; border: none;
+            background: transparent; color: var(--text-dim); text-align: left;
+            font-weight: 600; cursor: pointer; transition: 0.2s; margin-bottom: 5px;
+            font-size: 0.9rem; display: flex; align-items: center; gap: 10px;
+        }
+
+        .btn:hover { background: #1f2937; color: #fff; }
+        .btn.active { background: var(--primary); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .btn-quiz { background: linear-gradient(45deg, #f59e0b, #ef4444); color: #fff; margin-top: 20px; justify-content: center; }
+
+        /* --- ОСНОВНОЙ КОНТЕНТ --- */
+        .main { flex: 1; overflow-y: auto; padding: 40px; background: radial-gradient(circle at 50% 0%, #111827, #030712); }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .stats { background: #1f2937; padding: 10px 20px; border-radius: 50px; font-weight: 800; border: 1px solid #374151; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- КАРТОЧКА --- */
+        .card { height: 260px; perspective: 1000px; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; background: var(--card-grad); padding: 20px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 1px solid #374151; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .card-back { background: var(--primary); transform: rotateY(180deg); border: none; }
+
+        .ar { font-family: 'Amiri', serif; font-size: 4rem; color: var(--accent); margin: 0; }
+        .tr { color: var(--text-dim); font-size: 0.9rem; margin-top: 10px; font-weight: 500; }
+        .ru { font-size: 1.6rem; font-weight: 800; text-align: center; color: #fff; }
+
+        /* --- ТЕСТ --- */
+        .quiz-view { max-width: 500px; margin: 0 auto; text-align: center; background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid #374151; }
+        .opt { width: 100%; padding: 16px; margin: 10px 0; background: #1f2937; border: 2px solid transparent; border-radius: 15px; color: #fff; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .opt:hover { border-color: var(--primary); }
+        .opt.correct { background: #059669; }
+        .opt.wrong { background: #dc2626; }
+
+        /* --- МОБИЛКА --- */
+        @media (max-width: 850px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: 70px; flex-direction: row; position: fixed; bottom: 0; z-index: 100; padding: 5px; border-right: none; border-top: 1px solid #374151; }
+            .logo, .nav-label, .nav-section:not(:first-child) { display: none; }
+            .nav-section { display: flex; width: 100%; overflow-x: auto; gap: 8px; }
+            .btn { white-space: nowrap; font-size: 0.75rem; padding: 10px; flex-shrink: 0; background: #1f2937; }
+            .btn-quiz { margin-top: 0; position: fixed; top: 15px; right: 15px; width: auto; padding: 8px 15px; }
+            .main { padding: 20px 15px 100px 15px; }
+            .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .ar { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="logo">ARABIC MEGA</div>
+    
+    <div class="nav-section">
+        <div class="nav-label">Алфавит и Цифры</div>
+        <button class="btn active" onclick="ui.tab('alphabet', this)">Буквы</button>
+        <button class="btn" onclick="ui.tab('nums', this)">Цифры</button>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Словарь</div>
+        <button class="btn" onclick="ui.tab('family', this)">Семья</button>
+        <button class="btn" onclick="ui.tab('city', this)">Город</button>
+        <button class="btn" onclick="ui.tab('nature', this)">Природа</button>
+        <button class="btn" onclick="ui.tab('food', this)">Еда</button>
+        <button class="btn" onclick="ui.tab('body', this)">Тело</button>
+        <button class="btn" onclick="ui.tab('colors', this)">Цвета</button>
+        <button class="btn" onclick="ui.tab('verbs', this)">Глаголы</button>
+    </div>
+
+    <button class="btn btn-quiz" onclick="ui.quiz()">🎯 ЭКЗАМЕН</button>
+</aside>
+
+<main class="main">
+    <div class="header">
+        <h1 id="title" style="margin:0; font-size: 1.5rem;">Буквы</h1>
+        <div class="stats">🔥 <span id="xp">0</span> XP</div>
+    </div>
+    <div id="view"></div>
+</main>
+
+<script>
+const db = {
+    alphabet: [
+        {a:"ا", t:"Alif", r:"А"}, {a:"ب", t:"Ba", r:"Б"}, {a:"ت", t:"Ta", r:"Т"}, {a:"ث", t:"Tha", r:"С (мжз)"},
+        {a:"ج", t:"Jim", r:"Дж"}, {a:"ح", t:"Ha", r:"Х (гл)"}, {a:"خ", t:"Kha", r:"Х (тв)"}, {a:"د", t:"Dal", r:"Д"},
+        {a:"ذ", t:"Thal", r:"З (мжз)"}, {a:"ر", t:"Ra", r:"Р"}, {a:"ز", t:"Zay", r:"З"}, {a:"س", t:"Sin", r:"С"},
+        {a:"ش", t:"Shin", r:"Ш"}, {a:"ص", t:"Sad", r:"С (эмф)"}, {a:"ض", t:"Dad", r:"Д (эмф)"}, {a:"ط", t:"Ta", r:"Т (эмф)"},
+        {a:"ظ", t:"Za", r:"З (эмф)"}, {a:"ع", t:"Ayn", r:"'А"}, {a:"غ", t:"Ghayn", r:"Г"}, {a:"ف", t:"Fa", r:"Ф"},
+        {a:"ق", t:"Qaf", r:"К (гл)"}, {a:"ك", t:"Kaf", r:"К (мяг)"}, {a:"ل", t:"Lam", r:"Л"}, {a:"م", t:"Mim", r:"М"},
+        {a:"ن", t:"Nun", r:"Н"}, {a:"ه", t:"Ha", r:"Х (лёг)"}, {a:"و", t:"Waw", r:"В/У"}, {a:"ي", t:"Ya", r:"Й/И"}
+    ],
+    nums: [
+        {a:"٠", t:"Sifr", r:"0"}, {a:"١", t:"Wahid", r:"1"}, {a:"٢", t:"Ithnan", r:"2"}, {a:"٣", t:"Thalatha", r:"3"},
+        {a:"٤", t:"Arba'a", r:"4"}, {a:"٥", t:"Khamsa", r:"5"}, {a:"٦", t:"Sitta", r:"6"}, {a:"٧", t:"Sab'a", r:"7"},
+        {a:"٨", t:"Thamaniya", r:"8"}, {a:"٩", t:"Tis'a", r:"9"}, {a:"١٠", t:"Ashara", r:"10"},
+        {a:"٢٠", t:"Ishrun", r:"20"}, {a:"٥٠", t:"Khamsun", r:"50"}, {a:"١٠٠", t:"Mi'a", r:"100"}, {a:"١٠٠٠", t:"Alf", r:"1000"}
+    ],
+    family: [
+        {a:"أُمّ", t:"Umm", r:"Мать"}, {a:"أَب", t:"Ab", r:"Отец"}, {a:"اِبْن", t:"Ibn", r:"Сын"}, {a:"اِبْنَة", t:"Ibna", r:"Дочь"},
+        {a:"أَخ", t:"Akh", r:"Брат"}, {a:"أُخْت", t:"Ukht", r:"Сестра"}, {a:"زَوْج", t:"Zawj", r:"Муж"}, {a:"زَوْجَة", t:"Zawja", r:"Жена"},
+        {a:"جَدّ", t:"Jadd", r:"Дед"}, {a:"عَمّ", t:"Amm", r:"Дядя"}, {a:"خَال", t:"Khal", r:"Дядя (мать)"}
+    ],
+    city: [
+        {a:"مَدِينَة", t:"Madina", r:"Город"}, {a:"بَيْت", t:"Bayt", r:"Дом"}, {a:"سَيَّارَة", t:"Sayyara", r:"Машина"}, {a:"سُوق", t:"Suq", r:"Рынок"},
+        {a:"طَرِيق", t:"Tariq", r:"Дорога"}, {a:"مَطْعَم", t:"Mat'am", r:"Ресторан"}, {a:"فُنْدُق", t:"Funduq", r:"Отель"}, {a:"مَدْرَسَة", t:"Madrasa", r:"Школа"}
+    ],
+    nature: [
+        {a:"شَمْس", t:"Shams", r:"Солнце"}, {a:"قَمَر", t:"Qamar", r:"Луна"}, {a:"سَمَاء", t:"Sama", r:"Небо"}, {a:"بَحْر", t:"Bahr", r:"Море"},
+        {a:"جَبَل", t:"Jabal", r:"Гора"}, {a:"نَهْر", t:"Nahr", r:"Река"}, {a:"شَجَرَة", t:"Shajara", r:"Дерево"}, {a:"وَرْدَة", t:"Warda", r:"Цветок"}
+    ],
+    food: [
+        {a:"خُبْز", t:"Khubz", r:"Хлеб"}, {a:"مَاء", t:"Ma", r:"Вода"}, {a:"لَحْم", t:"Lahm", r:"Мясо"}, {a:"حَلِيب", t:"Halib", r:"Молоко"},
+        {a:"تُفَّاح", t:"Tuffah", r:"Яблоко"}, {a:"قَهْوَة", t:"Qahwa", r:"Кофе"}, {a:"شَاي", t:"Shay", r:"Чай"}, {a:"بَيْض", t:"Bayd", r:"Яйца"}
+    ],
+    body: [
+        {a:"رَأْس", t:"Ra's", r:"Голова"}, {a:"عَيْن", t:"Ayn", r:"Глаз"}, {a:"يَد", t:"Yad", r:"Рука"}, {a:"رِجْل", t:"Rijl", r:"Нога"},
+        {a:"قَلْب", t:"Qalb", r:"Сердце"}, {a:"أُذُن", t:"Udun", r:"Ухо"}, {a:"فَم", t:"Fam", r:"Рот"}, {a:"أَنْف", t:"Anf", r:"Нос"}
+    ],
+    colors: [
+        {a:"أَحْمَر", t:"Ahmar", r:"Красный"}, {a:"أَزْرَق", t:"Azraq", r:"Синий"}, {a:"أَخْضَر", t:"Akhdar", r:"Зеленый"}, 
+        {a:"أَسْوَد", t:"Aswad", r:"Черный"}, {a:"أَبْيَض", t:"Abyad", r:"Белый"}, {a:"أَصْفَر", t:"Asfar", r:"Желтый"}
+    ],
+    verbs: [
+        {a:"أَكَلَ", t:"Akala", r:"Есть"}, {a:"شَرِبَ", t:"Shariba", r:"Пить"}, {a:"كَتَبَ", t:"Kataba", r:"Писать"}, 
+        {a:"ذَهَبَ", t:"Dhahaba", r:"Идти"}, {a:"رَأَى", t:"Ra'a", r:"Видеть"}, {a:"قَرَأَ", t:"Qara'a", r:"Читать"}
+    ]
+};
+
+let xp = parseInt(localStorage.getItem('arabic_xp')) || 0;
+document.getElementById('xp').innerText = xp;
+
+const ui = {
+    tab(cat, el) {
+        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('title').innerText = el.innerText;
+        this.render(db[cat]);
+    },
+    render(data) {
+        const view = document.getElementById('view');
+        view.innerHTML = `<div class="grid">${data.map(i => `
+            <div class="card" onclick="this.classList.toggle('flipped')">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="ar">${i.a}</div>
+                        <div class="tr">${i.t}</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="ru">${i.r}</div>
+                    </div>
+                </div>
+            </div>`).join('')}</div>`;
+    },
+    quiz() {
+        const all = Object.values(db).flat();
+        const q = all[Math.floor(Math.random()*all.length)];
+        const opts = [q, ...all.filter(x=>x.r!==q.r).sort(()=>.5-Math.random()).slice(0,3)].sort(()=>.5-Math.random());
+        
+        document.getElementById('title').innerText = "Экзамен";
+        document.getElementById('view').innerHTML = `
+            <div class="quiz-view">
+                <div class="ar" style="font-size:5rem; margin-bottom:20px">${q.a}</div>
+                ${opts.map(o => `<button class="opt" onclick="ui.check(this, '${o.r}', '${q.r}')">${o.r}</button>`).join('')}
+                <button class="btn btn-quiz" style="display:none; width:100%" id="next" onclick="ui.quiz()">Далее →</button>
+            </div>`;
+    },
+    check(btn, val, cor) {
+        document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+        if(val === cor) {
+            btn.classList.add('correct');
+            xp += 10;
+        } else {
+            btn.classList.add('wrong');
+            document.querySelectorAll('.opt').forEach(b => { if(b.innerText === cor) b.classList.add('correct'); });
+        }
+        localStorage.setItem('arabic_xp', xp);
+        document.getElementById('xp').innerText = xp;
+        document.getElementById('next').style.display = 'block';
+    }
+};
+
+ui.render(db.alphabet);
+</script>
+</body>
+</html>
